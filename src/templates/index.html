@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+  <head>
+    <title>BetterPointingPoker</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel='stylesheet' type="text/css" href='/static/styles.css'>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@500&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/uuid@latest/dist/umd/uuidv4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+  </head>
+
+  <body class="center-align">
+
+    <div class="container" id='maincontainer'>
+      <a href='/'><h1 id='bigtitle' class='center-align'>Better Pointing Poker</h1></a>
+
+      <button id='newsessionbutton' class="waves-effect waves-light btn" onclick="gotoSession();">Create New Room</button>
+    </div>
+    
+    <script>
+      let output = document.getElementById('newSession');
+      function gotoSession(){
+        window.location = `http://127.0.0.1:3000/session/${uuidv4()}`;
+      };
+    </script>
+  </body>
+</html>

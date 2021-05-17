@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>BetterPointingPoker</title>
+    <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet'>
+    <link rel='stylesheet' type="text/css" href='/static/styles.css'>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'/>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js' integrity='sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=' crossorigin='anonymous'></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@500&display=swap" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  </head>
+
+  <body>
+    <div class='container center-align' id='maincontainer'>
+      <a href='/'><h1 id='bigtitle' class='center-align'>Better Pointing Poker</h1></a>
+      
+      <div class='row' id='namebox'>
+        <label for="name" class="namelabel">Enter Your Username</label>
+        <input id="name" type="text" autocomplete="off"/>
+      </div>
+  
+      <div id='mainbox'>
+        <div class='row' id='pokerdiv'>
+          <div id='users' class='col s2'>
+            <span class="usronline"><u>USERS ONLINE</u></span>
+            <ul id='users_ulist'>
+            </ul>
+          </div>
+          <div id='pointswindow' class='col s9 offset-s1'>
+            <div class='row' id='buttonsrow'>
+              <button id='clearvotesbutton' onclick='clearVotesHandler()' class="controlbutton waves-effect waves-light btn-flat">Clear Votes</button>
+              <button id='showvotesbutton' onclick='showVotesHandler()' class="controlbutton waves-effect waves-light btn-flat">Show Votes</button>
+            </div>
+            <div class='row' id='pointsgrid'>
+              <div class='col s3'>
+                <label>Vote</label>
+                <select id='votebrowser' class="browser-default dropdown-trigger">
+                  <option value="" disabled selected></option>
+                  <option value="0">0 points</option>
+                  <option value="0.5">1/2 point</option>
+                  <option value="1">1 point</option>
+                  <option value="2">2 points</option>
+                  <option value="3">3 points</option>
+                  <option value="5">5 points</option>
+                  <option value="8">8 points</option>
+                  <option value="13">13 points</option>
+                  <option value="20">20 points</option>
+                  <option value="40">40 points</option>
+                  <option value="100">100 points</option>
+                  <option value="?">?</option>
+                </select>
+              </div>
+              <label for="ticketinfo">Ticket Info</label>
+              <textarea id='ticketinfo' name='tickettext' class='col s8 offset-s1'></textarea>
+            </div>
+            <div class='row' id='graph'>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+
+      $("#mainbox").hide()
+      $("#graph").hide()
+
+      var socket = io('http://localhost:3000/', { reconnection: false, forceNew: true  })
+      var username
+      let roomName = window.location.pathname.split("/").pop()
+      let state = {}
+
+      function showVotesHandler() {
+        socket.emit('show-votes', roomName)
+      }
+
+      function clearVotesHandler() {
+        socket.emit('clear-votes', roomName)
+      }
+
+      function draw(state) {
+        drawUsersList(state)
+        drawGraph(state)
+      }
+
+      function drawUsersList(state) {
+        userslist = document.getElementById('users_ulist');
+        userslist.innerHTML = ''
+        Object.keys(state).forEach(function(usr) {
+          let li = document.createElement('li')
+          li.innerHTML = `${usr}`
+          if (state[usr]) {
+            li.innerHTML = li.innerHTML + ` <span class='votepoint'>${state[usr]}</span>`
+          }
+          userslist.appendChild(li)
+        })
+      }
+
+      function drawGraph(state) {
+        let all_votes = Object.keys(state).filter(usr => {
+          return !(usr in ["", "?"])
+        }).map(usr => parseInt(state[usr], 10)).sort(function(a, b){return a-b})
+      
+        var data = [
+          {
+            histfunc: "count",
+            y: all_votes,
+            x: all_votes.map(i => `${i} pt.`),
+            type: "histogram",
+            name: "count"
+          }
+        ]
+
+        Plotly.newPlot('graph', data)
+      }
+
+      $("#votebrowser").on('change', function() {
+        socket.emit('vote', {
+          'roomid': roomName,
+          'username': username,
+          'vote': $("#votebrowser").val()
+        })
+      })
+
+      $("#name").on('keyup', function (e) {
+        if (e.keyCode === 13) {
+          username = $("#name").val()
+          $("#namebox").hide()
+          $("#mainbox").show()
+
+          socket.on('new-state', function(roomState) {
+            state = roomState
+            draw(state)
+          })
+          socket.on('hide-votes', function() {
+            
+          })
+          socket.on('show-votes', function() {
+
+          })
+          socket.emit('join-room', roomName)
+          socket.emit('add-user', {
+            'username': username,
+            'roomid': roomName
+          })
+        }
+      })
+    </script>
+  </body>
+</html>

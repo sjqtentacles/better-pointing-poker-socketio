@@ -1,0 +1,113 @@
+html, body {
+  font-family: 'Source Code Pro', monospace;
+  height: 100%;
+  color: rgba(0, 0, 0, 0.562);
+}
+
+#bigtitle {
+  padding: 20px;
+  color: rgba(0, 0, 0, 0.63);
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: rgba(0, 0, 0, 0.8);
+  font-size: 40px;
+}
+
+a {
+  text-decoration: none;
+}
+
+#newsessionbutton {
+  background-color: #8bd16aaf;
+  color: rgb(255, 255, 255);
+  width: 200px;
+  height: 100px;
+  border-radius: 3px;
+  font-size: 30px;
+}
+
+#votebrowser {
+  text-decoration: none;
+}
+
+#users {
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px groove rgba(0, 0, 0, 0.562);
+  font-size: 18px;
+  padding: 10px;
+}
+
+#users ul {
+  font-size: 13px;
+  padding: 0px 2px 5px 2px; 
+  color: rgb(206, 124, 124);
+}
+
+.votepoint {
+  font-size: 14px;
+  color: rgb(70, 182, 55);
+  padding: 2px;
+}
+
+#users .usronline {
+  color:  rgba(0, 0, 0, 0.562);
+}
+
+.namelabel {
+  color: rgba(0, 0, 0, 0.9);
+  font-size: 13px;
+}
+
+#name {
+  border: 1px groove rgba(0, 0, 0, 0.562);
+  padding: 3px 8px 3px 8px;
+  width: 200px;
+  color: rgb(206, 124, 124);
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+#namebox {
+  width: 400px;
+}
+
+#buttonsrow {
+  padding: 10px 15px 10px 15px;
+}
+
+#clearvotesbutton, #showvotesbutton {
+  background-color: transparent;  
+  border: 1px solid rgba(0, 0, 0, 0.562);
+  border-radius: 1px;
+}
+
+#pointswindow {
+  border: 1px solid rgba(0, 0, 0, 0.562);
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+#ticketinfo {
+  resize: vertical;
+}
+
+#mainbox {
+
+}
+
+#pointsgrid {
+  padding: 10px 15px 10px 10px;
+}
+
+#pointsgrid button {
+  background-color: aliceblue;
+  color: darkslategray;
+}
+
+#maincontainer {
+  background-color: rgba(255, 255, 255, 0.493);
+  height: 100%;
+  padding: 10px;
+  width: 800px;
+}
+
+#results {
+  width: 200px;
+}
